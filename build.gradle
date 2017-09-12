@@ -42,7 +42,11 @@ project(':one-to-one'){
 		compile project (':config')
 	}
 }
-
+project(':hibernate-full'){
+	dependencies{
+		compile project (':config')
+	}
+}
 project(':config'){
 	dependencies{
 		compile('org.springframework.boot:spring-boot-starter-data-jpa')

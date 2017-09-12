@@ -19,7 +19,7 @@ public class HibernateSpringConfig {
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		dataSource.setUsername("root");
 		dataSource.setPassword("user");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/basics");
+		dataSource.setUrl("jdbc:mysql://localhost:3306/hrdb");
 		return dataSource;
 	}
 
@@ -35,6 +35,7 @@ public class HibernateSpringConfig {
 	private static Properties getHibernateProperties() {
 		Properties properties = new Properties();
 		properties.put("hibernate.hbm2ddl.auto", "update");
+		properties.put("hibernate.show_sql", true);
 		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 		return properties;
 	}

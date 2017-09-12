@@ -1,1 +1,1 @@
-include 'basics', 'config', 'one-to-one', 'one-to-many' , 'many-to-one', 'many-to-many'
+include 'basics', 'config', 'one-to-one', 'one-to-many' , 'many-to-one', 'many-to-many', 'hibernate-full'
