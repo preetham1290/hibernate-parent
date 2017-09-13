@@ -2,8 +2,7 @@ package com.wrampup.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -17,66 +16,45 @@ public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="EMPLOYEE_ID")
-	private long employeeId;
+	private int employeeNumber;
 
-	@Column(name="COMMISSION_PCT")
-	private BigDecimal commissionPct;
-
-	@Column(name="DEPARTMENT_ID")
-	private BigDecimal departmentId;
-
-	@Column(name="EMAIL")
 	private String email;
 
-	@Column(name="FIRST_NAME")
+	private String extension;
+
 	private String firstName;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="HIRE_DATE")
-	private Date hireDate;
+	private String jobTitle;
 
-	@Column(name="JOB_ID")
-	private String jobId;
-
-	@Column(name="LAST_NAME")
 	private String lastName;
 
-	@Column(name="MANAGER_ID")
-	private BigDecimal managerId;
+	//bi-directional many-to-one association to Customer
+	@OneToMany(mappedBy="employee")
+	private List<Customer> customers;
 
-	@Column(name="PHONE_NUMBER")
-	private String phoneNumber;
+	//bi-directional many-to-one association to Employee
+	@ManyToOne
+	@JoinColumn(name="reportsTo")
+	private Employee employee;
 
-	@Column(name="SALARY")
-	private BigDecimal salary;
+	//bi-directional many-to-one association to Employee
+	@OneToMany(mappedBy="employee")
+	private List<Employee> employees;
+
+	//bi-directional many-to-one association to Office
+	@ManyToOne
+	@JoinColumn(name="officeCode")
+	private Office office;
 
 	public Employee() {
 	}
 
-	public long getEmployeeId() {
-		return this.employeeId;
+	public int getEmployeeNumber() {
+		return this.employeeNumber;
 	}
 
-	public void setEmployeeId(long employeeId) {
-		this.employeeId = employeeId;
-	}
-
-	public BigDecimal getCommissionPct() {
-		return this.commissionPct;
-	}
-
-	public void setCommissionPct(BigDecimal commissionPct) {
-		this.commissionPct = commissionPct;
-	}
-
-	public BigDecimal getDepartmentId() {
-		return this.departmentId;
-	}
-
-	public void setDepartmentId(BigDecimal departmentId) {
-		this.departmentId = departmentId;
+	public void setEmployeeNumber(int employeeNumber) {
+		this.employeeNumber = employeeNumber;
 	}
 
 	public String getEmail() {
@@ -87,6 +65,14 @@ public class Employee implements Serializable {
 		this.email = email;
 	}
 
+	public String getExtension() {
+		return this.extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
 	public String getFirstName() {
 		return this.firstName;
 	}
@@ -95,20 +81,12 @@ public class Employee implements Serializable {
 		this.firstName = firstName;
 	}
 
-	public Date getHireDate() {
-		return this.hireDate;
+	public String getJobTitle() {
+		return this.jobTitle;
 	}
 
-	public void setHireDate(Date hireDate) {
-		this.hireDate = hireDate;
-	}
-
-	public String getJobId() {
-		return this.jobId;
-	}
-
-	public void setJobId(String jobId) {
-		this.jobId = jobId;
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
 	}
 
 	public String getLastName() {
@@ -119,57 +97,64 @@ public class Employee implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public BigDecimal getManagerId() {
-		return this.managerId;
+	public List<Customer> getCustomers() {
+		return this.customers;
 	}
 
-	public void setManagerId(BigDecimal managerId) {
-		this.managerId = managerId;
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
 	}
 
-	public String getPhoneNumber() {
-		return this.phoneNumber;
+	public Customer addCustomer(Customer customer) {
+		getCustomers().add(customer);
+		customer.setEmployee(this);
+
+		return customer;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public Customer removeCustomer(Customer customer) {
+		getCustomers().remove(customer);
+		customer.setEmployee(null);
+
+		return customer;
 	}
 
-	public BigDecimal getSalary() {
-		return this.salary;
+	public Employee getEmployee() {
+		return this.employee;
 	}
 
-	public void setSalary(BigDecimal salary) {
-		this.salary = salary;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Employee [employeeId=");
-		builder.append(employeeId);
-		builder.append(", commissionPct=");
-		builder.append(commissionPct);
-		builder.append(", departmentId=");
-		builder.append(departmentId);
-		builder.append(", email=");
-		builder.append(email);
-		builder.append(", firstName=");
-		builder.append(firstName);
-		builder.append(", hireDate=");
-		builder.append(hireDate);
-		builder.append(", jobId=");
-		builder.append(jobId);
-		builder.append(", lastName=");
-		builder.append(lastName);
-		builder.append(", managerId=");
-		builder.append(managerId);
-		builder.append(", phoneNumber=");
-		builder.append(phoneNumber);
-		builder.append(", salary=");
-		builder.append(salary);
-		builder.append("]");
-		return builder.toString();
+	public List<Employee> getEmployees() {
+		return this.employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
+	public Employee addEmployee(Employee employee) {
+		getEmployees().add(employee);
+		employee.setEmployee(this);
+
+		return employee;
+	}
+
+	public Employee removeEmployee(Employee employee) {
+		getEmployees().remove(employee);
+		employee.setEmployee(null);
+
+		return employee;
+	}
+
+	public Office getOffice() {
+		return this.office;
+	}
+
+	public void setOffice(Office office) {
+		this.office = office;
 	}
 
 }
